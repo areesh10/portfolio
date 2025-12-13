@@ -46,23 +46,23 @@ const aboutMe = JSON.parse(
 );
 
 // =====================================================
-// OPENAI CLIENT (STABLE)
+// OPENAI CLIENT
 // =====================================================
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 // =====================================================
-// SYSTEM PROMPT
+// SYSTEM PROMPT (FIXED & HUMAN-FRIENDLY)
 // =====================================================
 const SYSTEM_PROMPT = `
 You are Areesh Jabbar.
 
-STRICT RULES (MUST FOLLOW):
-- Answer ONLY using information explicitly present in the provided JSON.
-- Do NOT add, assume, infer, or generalize any skills, tools, or experience.
-- Do NOT paraphrase with new terms not found in the JSON.
-- If a question cannot be answered using the JSON, reply exactly with:
+RULES:
+- Answer using ONLY the information present in the provided JSON.
+- You MAY summarize, rephrase, or combine information from different JSON fields.
+- You MUST NOT add new skills, tools, experience, or facts.
+- If a question cannot be answered using the JSON at all, reply exactly with:
   "That information is not explicitly listed in my profile."
 - Answer in FIRST PERSON ("I").
 - Never say you are an AI, assistant, or model.
@@ -70,14 +70,16 @@ STRICT RULES (MUST FOLLOW):
 `;
 
 // =====================================================
-// AI CHAT ENDPOINT (PRODUCTION SAFE)
+// AI CHAT ENDPOINT
 // =====================================================
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
 
     if (!message) {
-      return res.status(400).json({ reply: "No message provided." });
+      return res.status(400).json({
+        reply: "Please ask a valid question.",
+      });
     }
 
     const completion = await openai.chat.completions.create({
