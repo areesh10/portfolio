@@ -1,0 +1,764 @@
+/* ================================
+   🌗 GLOBAL VARIABLES
+=================================== */
+:root {
+  --bg: #f5f5f5;
+  --text: #f1f5f9;
+  --panel: rgba(17, 21, 26, 0.7);
+  --muted: #9aa4b2;
+  --brand: #7c3aed;
+  --brand-2: #06b6d4;
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  --glass-blur: blur(18px);
+}
+
+body.light {
+  --bg: #f8fafc;
+  --text: #111;
+  --panel: rgba(255, 255, 255, 0.8);
+  --muted: #5b6470;
+  --border: rgba(0, 0, 0, 0.08);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ================================
+   🧱 BASE STYLES
+=================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+
+  /* ✅ ADDED — this reduces extra white space */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+html { scroll-behavior: smooth; }
+
+a { color: var(--brand); text-decoration: none; transition: 0.3s; }
+a:hover { color: var(--brand-2); }
+
+/* ================================
+   🌈 NAVBAR
+=================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: var(--shadow);
+  padding: 1rem 0;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.nav-links {
+  display: flex;
+  gap: 3rem;
+}
+
+.nav-btn {
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  transition: 0.3s;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.hamburger {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s ease;
+}
+
+/* 🌙 Theme + Hire Me Group */
+.top-actions {
+  position: absolute;
+  right: 1.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* 🌙 Theme Icon */
+.theme-icon {
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.theme-icon:hover {
+  color: #ffe97f;
+  transform: scale(1.1);
+}
+
+/* 🎯 Hire Me Button */
+.hire-btn {
+  padding: 0.6rem 1.3rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  transition: 0.3s ease;
+}
+
+.hire-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(124, 58, 237, 0.4);
+}
+
+/* ================================
+   🧊 SIDEBAR
+=================================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 300px;
+  height: 100vh;
+  background: linear-gradient(135deg, #f3e8ff 0%, #dbeafe 50%, #e0e7ff 100%);
+  background-size: 300% 300%;
+  animation: gradientFlow 16s ease infinite;
+  backdrop-filter: var(--glass-blur);
+  border-right: 1px solid var(--border);
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.sidebar.show { left: 0; }
+
+.sidebar-header {
+  width: 100%;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: white;
+  border-radius: 0 0 20px 20px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  box-shadow: 0 4px 25px rgba(124, 58, 237, 0.4);
+}
+
+.sidebar-header img {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.sidebar-header h3 { font-size: 1.1rem; font-weight: 700; }
+.sidebar-header p { font-size: 0.85rem; }
+
+.sidebar-header button {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 1.4rem;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.sidebar-links {
+  list-style: none;
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1.2rem;
+}
+
+.sidebar-links a {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: 0.3s ease;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  position: relative;
+}
+
+.divider {
+  width: 85%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 0.3rem auto;
+  border-radius: 2px;
+}
+
+.sidebar-links a:hover {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: white;
+  transform: translateX(5px);
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+}
+
+.sidebar-section {
+  margin-top: 1.5rem;
+  padding: 0 1.2rem;
+}
+
+.sidebar-section h4 {
+  color: var(--brand);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: white;
+}
+
+.btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn.secondary:hover {
+  color: var(--brand);
+  border-color: var(--brand);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-align: left;
+}
+
+.sidebar-footer a {
+  color: var(--brand);
+  font-weight: 600;
+}
+.sidebar-footer a:hover { color: var(--brand-2); }
+
+.sidebar-footer .socials {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.sidebar-footer .socials a {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+/* ================================
+   HERO SECTION
+=================================== */
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  scroll-margin-top: 80px;
+  position: relative;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.3rem, 5vw, 3.8rem);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ⭐ MOVE HERO UPWARD + ALIGN */
+.hero-content {
+  margin-top: -120px;
+  text-align: center;
+}
+
+.hero-content span {
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #ffe97f !important;  /* ⭐ UPDATED TO YELLOW */
+  font-size: 1.1rem;
+  margin-top: 0.6rem;
+}
+
+/* ⭐ SUMMARY + EXTRA SUMMARY */
+.summary-text,
+.extra-summary {
+  max-width: 750px;
+  margin: 1rem auto;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #e5e7eb;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+/* ⭐ MAKE BOTTOM TAGLINE 100% VISIBLE */
+.hero .extra-summary {
+  color: #ffffff !important;
+}
+
+/* 🌟 UPDATED HERO BACKGROUND */
+.hero {
+  position: relative;
+  background: radial-gradient(circle at 20% 30%, #1e3a8a, transparent 60%),
+              radial-gradient(circle at 80% 70%, #7c3aed, transparent 55%),
+              linear-gradient(135deg, #0a0f1f, #111827);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--brand), transparent 70%);
+  filter: blur(100px);
+  opacity: 0.4;
+}
+
+/* ================================
+   FOOTER
+=================================== */
+.footer {
+  width: 100%;
+  height: 70px;
+
+  display: flex;
+  align-items: center;        /* vertical center */
+  justify-content: center;    /* horizontal center */
+
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e1b4b,
+    #312e81
+  );
+
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  margin-top: auto;           /* ✅ sticks to bottom */
+}
+/* ================================
+   ABOUT SECTION (FULL GREY BACKGROUND)
+=================================== */
+
+.about {
+  background: #e5e5e5;         /* full grey background */
+  width: 100%;                 /* stretch full width */
+  padding: 4rem 0;             /* vertical spacing */
+  border-radius: 0;            /* remove previous rounded look */
+  margin: 0;                   /* remove centering */
+}
+
+/* Inner centered container */
+.about-container {
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.2rem;
+  padding: 3rem 1rem;
+  background: transparent !important;   /* remove grey box */
+  border-radius: 0 !important;          /* remove rounding */
+  box-shadow: none !important;          /* remove shadow */
+}
+
+
+.robot-img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 25px rgba(0,0,0,0.25));
+  animation: floatBot 4s ease-in-out infinite;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes floatBot {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.chatBox {
+  width: 100%;
+  max-width: 600px;
+  min-height: 140px;
+  background: var(--panel);
+  padding: 1.2rem;
+  margin-top: 1rem;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+}
+
+.chatForm {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.chatForm input {
+  width: 60%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  outline: none;
+  font-size: 1rem;
+}
+
+chat-send {
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* =========================================================
+   ✅ PROJECTS SECTION – MODERN GRADIENT (ADDITION ONLY)
+   (No existing CSS modified)
+========================================================= */
+
+.projects {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
+  color: #f8fafc;
+  width: 100%;
+  padding: 5rem 1.5rem;
+}
+
+.projects h2 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 3rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.projects .project {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 1.8rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.35s ease;
+  text-align: left;
+}
+
+.projects .project:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
+.projects .project h3 {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.projects .project p {
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.projects .tag {
+  display: inline-block;
+  margin-top: 0.6rem;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+}
+/* =========================================================
+   🌈 CONTACT SECTION – ANIMATED GRADIENT (OPTION 3)
+   ✅ ADDITION ONLY | NO EXISTING CODE MODIFIED
+========================================================= */
+
+.contact {
+  position: relative;
+  width: 100%;
+  padding: 4rem 1.5rem;     /* ✅ controls height naturally */
+  background: linear-gradient(
+    120deg,
+    #0f172a,
+    #1e1b4b,
+    #312e81,
+    #0f172a
+  );
+  background-size: 500% 500%;
+  animation: contactGradient 14s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+
+/* Gradient animation */
+@keyframes contactGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Contact content */
+.contact h2 {
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.contact p {
+  font-size: 1.05rem;
+  color: #e5e7eb;
+  margin: 0.8rem 0 2rem;
+}
+
+/* Button override (without touching existing .btn) */
+.contact .btn {
+  padding: 0.85rem 2.2rem;
+  font-size: 1.05rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.5);
+  transition: all 0.35s ease;
+}
+
+.contact .btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 20px 45px rgba(6, 182, 212, 0.55);
+}
+
+/* Subtle glow */
+.contact::after {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(124,58,237,0.35), transparent 70%);
+  filter: blur(160px);
+  bottom: -200px;
+  right: -200px;
+}
+* Make Contact feel more dominant */
+.contact {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+footer {
+  padding: 5px 0;   /* reduce from 40px / 60px etc */
+}
+/* ================================
+   HIRE ME MODAL
+================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, #0f172a, #312e81);
+  padding: 30px;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 16px;
+  color: white;
+  position: relative;
+  animation: popup 0.3s ease;
+}
+
+@keyframes popup {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.form-sub {
+  text-align: center;
+  font-size: 14px;
+  color: #c7d2fe;
+  margin-bottom: 20px;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+}
+
+.modal-content textarea {
+  resize: none;
+  height: 100px;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.close {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  font-size: 22px;
+  cursor: pointer;
+}
+/* ============================
+   CONTACT SOCIAL ICONS
+============================ */
+
+.contact-socials {
+  margin-top: 25px;
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-icon {
+  width: 42px;
+  height: 42px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  cursor: pointer;
+}
+
+
+.contact-icon:hover {
+  transform: scale(1.18);
+  opacity: 0.8;
+}
+/* ============================
+   Sidebar Download Button
+============================ */
+
+.sidebar-download-btn {
+  display: block;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  padding: 0.8rem 1rem;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: 600;
+  color: white !important;
+  margin-top: 0.8rem;
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+  transition: 0.3s ease;
+}
+
+.sidebar-download-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(6, 182, 212, 0.45);
+  opacity: 0.95;
+}
+.resume-download-btn {
+  display: inline-block;
+  margin-top: 1.2rem;   /* ⭐ Add space above the button */
+  padding: 0.85rem 2.2rem;
+  font-size: 1.05rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35);
+  transition: all 0.3s ease;
+}

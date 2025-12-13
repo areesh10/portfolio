@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Areesh Jabbar | Full Stack Developer</title>
+
+  <!-- FIXED PATHS FOR VERCEL -->
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/script.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body class="light">
+
+  <!-- 🌈 NAVBAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="hamburger" id="hamburger">☰</div>
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-btn">Home</a>
+        <a href="#about" class="nav-btn">About</a>
+        <a href="#projects" class="nav-btn">Projects</a>
+        <a href="#contact" class="nav-btn">Contact</a>
+      </nav>
+
+      <div class="top-actions">
+        <i class="theme-icon" id="themeToggle">🌙</i>
+        <button type="button" class="btn primary hire-btn">Hire Me</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 🧭 SIDEBAR MENU -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+
+      <!-- FIXED IMAGE PATH -->
+      <img src="/profile.jpeg" alt="Profile" class="profile-pic" />
+
+      <div>
+        <h3>Areesh Jabbar</h3>
+        <p>Full Stack Developer</p>
+      </div>
+      <button id="closeSidebar">&times;</button>
+    </div>
+
+    <ul class="sidebar-links">
+      <li><a href="#about">🤖 About</a></li>
+      <div class="divider"></div>
+      <li><a href="#projects">💻 Projects</a></li>
+      <div class="divider"></div>
+      <li><a href="#contact">📬 Contact</a></li>
+      <div class="divider"></div>
+
+      <!-- FIXED RESUME PATH -->
+      <li>
+        <a href="/Resume (5).pdf" download class="sidebar-download-btn">
+          ⬇️ Download Resume
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section">
+      <h4>🧠 AI Shortcuts</h4>
+      <a href="#about" class="btn secondary ai-btn">Ask AI About Me</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <h4>📧 Contact</h4>
+
+      <p>Email: <a href="mailto:areeshjabbar6@gmail.com">areeshjabbar6@gmail.com</a></p>
+
+      <div class="socials">
+        <a href="https://github.com/areesh74/areesh74" target="_blank">🐱 GitHub</a>
+        <a href="https://www.linkedin.com/in/areesh-jabbar-002074331/" target="_blank">💼 LinkedIn</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 🦸 HERO -->
+  <section id="home" class="section hero">
+    <div class="hero-content">
+      <h1>Hi, I'm <span>Areesh Jabbar</span> 👋</h1>
+
+      <p class="summary-text">
+        I completed my B.E. in Computer Science & Engineering from
+        <strong>Sir M. Visvesvaraya Institute of Technology (2025)</strong>.
+        I am passionate about
+        <strong>Cloud Computing</strong>, <strong>Artificial Intelligence</strong>,
+        and <strong>MERN Stack Development</strong>.
+      </p>
+
+      <p class="extra-summary">
+        I have hands-on experience with AI/ML frameworks like
+        <strong>YOLOv8</strong>, <strong>DeepLabv3</strong>, and <strong>U-Net</strong>.
+        I also work with <strong>Node.js</strong>, <strong>Express.js</strong>,
+        <strong>MongoDB</strong>, <strong>Docker</strong>, and <strong>Kubernetes</strong>.
+      </p>
+
+      <p class="subtitle">
+        Full Stack Developer • AI Explorer • Cloud Enthusiast
+      </p>
+    </div>
+    <div class="hero-bg"></div>
+  </section>
+
+  <!-- 🤖 ABOUT -->
+  <section id="about" class="section about card">
+    <div class="about-container">
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712105.png" alt="AI Robot" class="robot-img" />
+
+      <h2>🧠 About Me (AI Chat)</h2>
+      <p class="muted">Ask me about my skills, projects, or experience.</p>
+
+      <div id="chatBox" class="chatBox"></div>
+
+      <form id="chatForm" class="chatForm">
+        <input id="chatInput" type="text" placeholder="Ask me anything..." required />
+        <button type="submit" class="btn primary chat-send">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 💻 PROJECTS -->
+  <section id="projects" class="section projects card">
+    <h2>Projects 💻</h2>
+    <div class="projects-grid">
+      <div class="project">
+        <h3>Wall Segmentation U-Net</h3>
+        <p>Deep learning model for blueprint wall segmentation using U-Net.</p>
+        <span class="tag">PyTorch</span>
+        <span class="tag">Computer Vision</span>
+      </div>
+
+      <div class="project">
+        <h3>Question Paper Formatter</h3>
+        <p>Automated system for formatting question papers efficiently.</p>
+        <span class="tag">Django</span>
+        <span class="tag">Bootstrap</span>
+      </div>
+
+      <div class="project">
+        <h3>Drill Hip-Hop Beat Lab</h3>
+        <p>Interactive beat maker for drill-style hip-hop rhythms.</p>
+        <span class="tag">JavaScript</span>
+        <span class="tag">GSAP</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📞 CONTACT -->
+  <section id="contact" class="section contact card">
+    <h2>Contact 📬</h2>
+    <p>Let’s collaborate or connect!</p>
+
+    <a href="mailto:areeshjabbar6@gmail.com" class="btn primary">Email Me</a>
+
+    <a href="/Resume (5).pdf" download class="btn resume-download-btn">
+      Download Resume
+    </a>
+
+    <div class="contact-socials">
+      <a href="https://www.linkedin.com/in/areesh-jabbar-002074331/" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+             alt="LinkedIn" class="contact-icon">
+      </a>
+
+      <a href="https://github.com/areesh74/areesh74" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+             class="contact-icon" style="filter: invert(1);" />
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Areesh Jabbar | Built using MERN</p>
+  </footer>
+
+  <!-- Hire Me Modal -->
+  <div id="hireModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+
+      <h2>Hire Me 🚀</h2>
+      <p class="form-sub">Let’s Connect</p>
+
+      <form id="hireForm">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="tel" name="phone" placeholder="Your Contact Number" required />
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+{
+  "name": "Areesh Jabbar",
+  "role": "Software Engineer",
+  "summary": "I am a full stack developer with a strong interest in artificial intelligence, system design, and cloud technologies. I enjoy building scalable backend systems and integrating AI models into real-world applications.",
+
+  "education": [
+    "B.E. in Computer Science & Engineering, Sir M Visvesvaraya Institute of Technology (2025)"
+  ],
+
+  "skills": {
+    "programming_languages": [
+      "JavaScript",
+      "Python"
+    ],
+    "backend": [
+      "Node.js",
+      "Express.js"
+    ],
+    "frontend": [
+      "React",
+      "HTML",
+      "CSS"
+    ],
+    "databases": [
+      "MongoDB"
+    ],
+    "ai_ml": [
+      "YOLOv8",
+      "U-Net",
+      "DeepLabv3",
+      "PyTorch"
+    ],
+    "devops_cloud": [
+      "Docker",
+      "Kubernetes",
+      "Cloud Computing"
+    ]
+  },
+
+  "projects": [
+    {
+      "name": "Wall Segmentation using U-Net",
+      "description": "Built a deep learning-based system to segment walls from architectural blueprint images using a U-Net architecture.",
+      "tech_stack": ["PyTorch", "U-Net", "Computer Vision"],
+      "learning_outcomes": [
+        "Image segmentation",
+        "Model training and evaluation",
+        "Handling noisy blueprint data"
+      ]
+    },
+    {
+      "name": "Question Paper Formatter",
+      "description": "Created an automated platform to format academic question papers efficiently.",
+      "tech_stack": ["Django", "HTML", "CSS"],
+      "learning_outcomes": [
+        "Backend logic design",
+        "Template-based document generation",
+        "Workflow automation"
+      ]
+    },
+    {
+      "name": "Drill Hip-Hop Beat Lab",
+      "description": "Developed an interactive web application for creating drill-style hip-hop beats.",
+      "tech_stack": ["JavaScript", "GSAP", "Web Audio Concepts"],
+      "learning_outcomes": [
+        "Interactive UI design",
+        "Timing and rhythm logic",
+        "Creative frontend development"
+      ]
+    }
+  ],
+
+  "experience": [
+    "Hands-on experience building backend APIs using Node.js and Express.",
+    "Worked on integrating AI models into applications for computer vision tasks.",
+    "Experience deploying and containerizing applications using Docker.",
+    "Worked with cloud concepts related to scalable application deployment."
+  ],
+
+  "system_design": [
+    "Understanding of REST API design principles.",
+    "Basic knowledge of low-level and high-level system design concepts.",
+    "Familiar with designing modular and scalable backend architectures."
+  ],
+
+  "problem_solving": [
+    "Comfortable with debugging complex issues in backend and AI pipelines.",
+    "Strong foundation in data structures and algorithms.",
+    "Able to break down complex problems into smaller, solvable components."
+  ],
+
+  "strengths": [
+    "Quick learner",
+    "Strong problem-solving mindset",
+    "Ability to self-learn complex technologies",
+    "Balances technical and creative skills"
+  ],
+
+  "career_interests": [
+    "Software engineering roles",
+    "Backend development",
+    "AI-enabled applications",
+    "Cloud-native systems"
+  ],
+
+  "availability": [
+    "Open to internships and full-time roles",
+    "Interested in startup and product-based company environments"
+  ],
+
+  "extra": "I am also a music engineer and have mixed and mastered over 1,000 songs using professional DAWs such as Ableton Live and FL Studio."
+}
