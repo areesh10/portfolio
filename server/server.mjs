@@ -39,79 +39,64 @@ app.get("/", (req, res) => {
 });
 
 // =====================================================
-// LOAD ABOUT ME JSON (CONFIRMED PATH)
+// LOAD ABOUT ME JSON
 // =====================================================
 const aboutMe = JSON.parse(
   fs.readFileSync(path.join(__dirname, "about_me.json"), "utf-8")
 );
 
 // =====================================================
-// OPENAI CLIENT
+// OPENAI CLIENT (STABLE)
 // =====================================================
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 // =====================================================
-// AI CHAT ENDPOINT (LOGIC-FIRST, AI-FORMATTER)
+// SYSTEM PROMPT
+// =====================================================
+const SYSTEM_PROMPT = `
+You are Areesh Jabbar.
+
+STRICT RULES:
+- Answer ONLY using information explicitly present in the JSON.
+- If info is missing, say:
+  "That information is not explicitly listed in my profile."
+- Answer in FIRST PERSON.
+- Be factual and concise.
+`;
+
+// =====================================================
+// AI CHAT ENDPOINT (FINAL FIX)
 // =====================================================
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
     if (!message) {
-      return res.json({ reply: "Please ask a question." });
+      return res.status(400).json({ reply: "No message provided." });
     }
 
-    const q = message.toLowerCase();
-    let context = null;
-
-    if (q.includes("skill")) {
-      context = aboutMe.skills;
-    } else if (q.includes("project")) {
-      context = aboutMe.projects;
-    } else if (q.includes("experience")) {
-      context = aboutMe.experience;
-    } else if (q.includes("education")) {
-      context = aboutMe.education;
-    } else if (q.includes("about") || q.includes("summary")) {
-      context = aboutMe.summary;
-    } else if (q.includes("strength")) {
-      context = aboutMe.strengths;
-    } else if (q.includes("interest")) {
-      context = aboutMe.career_interests;
-    }
-
-    // ❌ NO MATCH → SAFE FALLBACK
-    if (!context) {
-      return res.json({
-        reply: "That information is not explicitly listed in my profile.",
-      });
-    }
-
-    // ✅ USE AI ONLY TO FORMAT THE ANSWER
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       temperature: 0,
       messages: [
+        { role: "system", content: SYSTEM_PROMPT },
         {
           role: "system",
           content:
-            "You are Areesh Jabbar. Answer in first person. Be clear, professional, and concise.",
+            "PROFILE JSON (ONLY SOURCE OF TRUTH):\n" +
+            JSON.stringify(aboutMe, null, 2),
         },
-        {
-          role: "user",
-          content: JSON.stringify(context, null, 2),
-        },
+        { role: "user", content: message },
       ],
     });
 
-    res.json({
-      reply: completion.choices[0].message.content,
-    });
+    const reply = completion.choices[0].message.content;
+    res.json({ reply });
 
   } catch (error) {
-    console.error("❌ AI ERROR:", error);
-    res.json({
+    console.error("❌ OPENAI ERROR:", error);
+    res.status(500).json({
       reply: "Server error. Please try again later.",
     });
   }
@@ -149,6 +134,7 @@ app.post("/send-message", async (req, res) => {
     });
 
     res.json({ message: "✅ Message sent successfully!" });
+
   } catch (error) {
     console.error("❌ Email Error:", error);
     res.status(500).json({ message: "❌ Failed to send message" });
@@ -156,7 +142,7 @@ app.post("/send-message", async (req, res) => {
 });
 
 // =====================================================
-// START SERVER (RENDER SAFE)
+// START SERVER
 // =====================================================
 const PORT = process.env.PORT || 8787;
 app.listen(PORT, () => {
