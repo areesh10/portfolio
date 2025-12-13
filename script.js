@@ -47,9 +47,8 @@ const chatBox = document.getElementById("chatBox");
 const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 
-// Replace conversation with a single message
 function renderSingleMessage(sender, text) {
-  chatBox.innerHTML = ""; // clear old messages
+  chatBox.innerHTML = "";
 
   const msg = document.createElement("div");
   msg.className = `chat-message ${sender}`;
@@ -58,7 +57,6 @@ function renderSingleMessage(sender, text) {
   chatBox.appendChild(msg);
 }
 
-// ENTER to submit chat
 if (chatInput) {
   chatInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -75,11 +73,9 @@ if (chatForm && chatInput && chatBox) {
     const message = chatInput.value.trim();
     if (!message) return;
 
-    // Show user's question
     renderSingleMessage("user", message);
     chatInput.value = "";
 
-    // Typing indicator
     chatBox.innerHTML = `
       <div class="chat-message ai">
         <strong>AI:</strong> Thinking...
@@ -87,7 +83,8 @@ if (chatForm && chatInput && chatBox) {
     `;
 
     try {
-      const res = await fetch("http://localhost:8787/api/chat", {
+      // ✅ FIXED: SAME-ORIGIN API CALL
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
@@ -155,14 +152,13 @@ window.addEventListener("click", (e) => {
 });
 
 // ===============================
-// 📬 HIRE ME FORM + ENTER TO SUBMIT
+// 📬 HIRE ME FORM
 // ===============================
 const hireForm = document.getElementById("hireForm");
 
 if (hireForm) {
   const messageBox = hireForm.elements.message;
 
-  // ENTER submit for hire form
   if (messageBox) {
     messageBox.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
@@ -182,7 +178,8 @@ if (hireForm) {
     };
 
     try {
-      const res = await fetch("http://localhost:8787/send-message", {
+      // ✅ FIXED: SAME-ORIGIN API CALL
+      const res = await fetch("/send-message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
