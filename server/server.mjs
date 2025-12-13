@@ -8,7 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // =====================================================
-// DEBUG (SAFE TO KEEP)
+// DEBUG
 // =====================================================
 console.log("🔑 OPENAI KEY EXISTS:", !!process.env.OPENAI_API_KEY);
 
@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // =====================================================
-// PATH HELPERS (ESM SAFE)
+// PATH HELPERS
 // =====================================================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,7 +46,7 @@ const aboutMe = JSON.parse(
 );
 
 // =====================================================
-// OPENAI CLIENT (NEW API – PRODUCTION SAFE)
+// OPENAI CLIENT (STABLE)
 // =====================================================
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -70,24 +70,21 @@ STRICT RULES (MUST FOLLOW):
 `;
 
 // =====================================================
-// AI CHAT ENDPOINT (FIXED)
+// AI CHAT ENDPOINT (PRODUCTION SAFE)
 // =====================================================
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
 
     if (!message) {
-      return res.status(400).json({ error: "No message provided" });
+      return res.status(400).json({ reply: "No message provided." });
     }
 
-    const response = await openai.responses.create({
-      model: "gpt-4o-mini",
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
       temperature: 0,
-      input: [
-        {
-          role: "system",
-          content: SYSTEM_PROMPT,
-        },
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
         {
           role: "system",
           content: `Here is my verified profile data (JSON). This is the ONLY source of truth:\n${JSON.stringify(
@@ -96,20 +93,21 @@ app.post("/api/chat", async (req, res) => {
             2
           )}`,
         },
-        {
-          role: "user",
-          content: message,
-        },
+        { role: "user", content: message },
       ],
     });
 
-    res.json({
-      reply: response.output_text,
-    });
+    const reply =
+      completion?.choices?.[0]?.message?.content ||
+      "That information is not explicitly listed in my profile.";
+
+    res.json({ reply });
 
   } catch (error) {
-    console.error("❌ AI ERROR:", error);
-    res.status(500).json({ error: "AI server error" });
+    console.error("❌ AI ERROR:", error?.message || error);
+    res.json({
+      reply: "That information is not explicitly listed in my profile.",
+    });
   }
 });
 
@@ -153,7 +151,7 @@ app.post("/send-message", async (req, res) => {
 });
 
 // =====================================================
-// START SERVER (RENDER SAFE)
+// START SERVER
 // =====================================================
 const PORT = process.env.PORT || 8787;
 app.listen(PORT, () => {
