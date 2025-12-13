@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 });
 
 // =====================================================
-// LOAD ABOUT ME JSON
+// LOAD ABOUT ME JSON (CONFIRMED PATH)
 // =====================================================
 const aboutMe = JSON.parse(
   fs.readFileSync(path.join(__dirname, "about_me.json"), "utf-8")
@@ -53,64 +53,66 @@ const openai = new OpenAI({
 });
 
 // =====================================================
-// SYSTEM PROMPT (FIXED & HUMAN-FRIENDLY)
-// =====================================================
-const SYSTEM_PROMPT = `
-You are Areesh Jabbar.
-
-RULES (MUST FOLLOW):
-- Answer questions using ONLY the information present in the provided JSON.
-- You ARE ALLOWED to summarize, rephrase, and combine related fields from the JSON
-  (for example: skills, experience, projects, education).
-- You MUST NOT invent, assume, or add any information not present in the JSON.
-- If a question cannot be answered using ANY field in the JSON, reply exactly with:
-  "That information is not explicitly listed in my profile."
-- Answer in FIRST PERSON ("I").
-- Never say you are an AI, assistant, or language model.
-- Keep answers factual, concise, and professional.
-`;
-
-
-// =====================================================
-// AI CHAT ENDPOINT
+// AI CHAT ENDPOINT (LOGIC-FIRST, AI-FORMATTER)
 // =====================================================
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
-
     if (!message) {
-      return res.status(400).json({
-        reply: "Please ask a valid question.",
+      return res.json({ reply: "Please ask a question." });
+    }
+
+    const q = message.toLowerCase();
+    let context = null;
+
+    if (q.includes("skill")) {
+      context = aboutMe.skills;
+    } else if (q.includes("project")) {
+      context = aboutMe.projects;
+    } else if (q.includes("experience")) {
+      context = aboutMe.experience;
+    } else if (q.includes("education")) {
+      context = aboutMe.education;
+    } else if (q.includes("about") || q.includes("summary")) {
+      context = aboutMe.summary;
+    } else if (q.includes("strength")) {
+      context = aboutMe.strengths;
+    } else if (q.includes("interest")) {
+      context = aboutMe.career_interests;
+    }
+
+    // ❌ NO MATCH → SAFE FALLBACK
+    if (!context) {
+      return res.json({
+        reply: "That information is not explicitly listed in my profile.",
       });
     }
 
+    // ✅ USE AI ONLY TO FORMAT THE ANSWER
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       temperature: 0,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
         {
           role: "system",
-          content: `Here is my verified profile data (JSON). This is the ONLY source of truth:\n${JSON.stringify(
-            aboutMe,
-            null,
-            2
-          )}`,
+          content:
+            "You are Areesh Jabbar. Answer in first person. Be clear, professional, and concise.",
         },
-        { role: "user", content: message },
+        {
+          role: "user",
+          content: JSON.stringify(context, null, 2),
+        },
       ],
     });
 
-    const reply =
-      completion?.choices?.[0]?.message?.content ||
-      "That information is not explicitly listed in my profile.";
-
-    res.json({ reply });
+    res.json({
+      reply: completion.choices[0].message.content,
+    });
 
   } catch (error) {
-    console.error("❌ AI ERROR:", error?.message || error);
+    console.error("❌ AI ERROR:", error);
     res.json({
-      reply: "That information is not explicitly listed in my profile.",
+      reply: "Server error. Please try again later.",
     });
   }
 });
@@ -147,7 +149,6 @@ app.post("/send-message", async (req, res) => {
     });
 
     res.json({ message: "✅ Message sent successfully!" });
-
   } catch (error) {
     console.error("❌ Email Error:", error);
     res.status(500).json({ message: "❌ Failed to send message" });
@@ -155,7 +156,7 @@ app.post("/send-message", async (req, res) => {
 });
 
 // =====================================================
-// START SERVER
+// START SERVER (RENDER SAFE)
 // =====================================================
 const PORT = process.env.PORT || 8787;
 app.listen(PORT, () => {
