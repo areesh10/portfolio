@@ -7,23 +7,25 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// =====================================================
+// APP SETUP
+// =====================================================
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // =====================================================
-// PATH HELPERS (ESM + Windows Safe)
+// PATH HELPERS (ESM SAFE)
 // =====================================================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ROOT FOLDER (portfolio/)
+// ROOT = portfolio/
 const ROOT_PATH = path.join(__dirname, "..");
-
-console.log("📁 Serving static from:", ROOT_PATH);
+console.log("📁 Serving frontend from:", ROOT_PATH);
 
 // =====================================================
-// SERVE FRONTEND (ROOT FOLDER)
+// SERVE FRONTEND FILES
 // =====================================================
 app.use(express.static(ROOT_PATH));
 
@@ -32,7 +34,7 @@ app.get("/", (req, res) => {
 });
 
 // =====================================================
-// LOAD ABOUT ME JSON
+// LOAD ABOUT ME JSON (SINGLE SOURCE OF TRUTH)
 // =====================================================
 const aboutMe = JSON.parse(
   fs.readFileSync(path.join(__dirname, "about_me.json"), "utf-8")
@@ -42,11 +44,11 @@ const aboutMe = JSON.parse(
 // OPENAI CLIENT
 // =====================================================
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 // =====================================================
-// SYSTEM PROMPT
+// SYSTEM PROMPT (STRICT MODE)
 // =====================================================
 const SYSTEM_PROMPT = `
 You are Areesh Jabbar.
@@ -63,7 +65,7 @@ STRICT RULES (MUST FOLLOW):
 `;
 
 // =====================================================
-// CHAT ENDPOINT
+// AI CHAT ENDPOINT
 // =====================================================
 app.post("/api/chat", async (req, res) => {
   try {
@@ -84,17 +86,21 @@ app.post("/api/chat", async (req, res) => {
             aboutMe,
             null,
             2
-          )}`
+          )}`,
         },
-        { role: "user", content: message }
-      ]
+        { role: "user", content: message },
+      ],
     });
 
-    res.json({ reply: completion.choices[0].message.content });
+    res.json({
+      reply: completion.choices[0].message.content,
+    });
 
   } catch (error) {
-    console.error("❌ Chat API error:", error);
-    res.status(500).json({ error: "Server error" });
+    console.error("❌ OpenAI Chat Error:", error?.message || error);
+    res.status(500).json({
+      error: "AI server error",
+    });
   }
 });
 
@@ -115,8 +121,8 @@ app.post("/send-message", async (req, res) => {
       service: "gmail",
       auth: {
         user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASS
-      }
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
     await transporter.sendMail({
@@ -128,22 +134,22 @@ app.post("/send-message", async (req, res) => {
         <p><b>Name:</b> ${name}</p>
         <p><b>Phone:</b> ${phone}</p>
         <p><b>Message:</b><br/>${message}</p>
-      `
+      `,
     });
 
     res.json({ message: "✅ Message sent successfully!" });
 
   } catch (error) {
-    console.error("❌ Email send error:", error);
+    console.error("❌ Email Error:", error?.message || error);
     res.status(500).json({ message: "❌ Failed to send message" });
   }
 });
 
 // =====================================================
-// START SERVER
+// START SERVER (RENDER SAFE)
 // =====================================================
 const PORT = process.env.PORT || 8787;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
