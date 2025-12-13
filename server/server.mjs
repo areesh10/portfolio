@@ -8,7 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // =====================================================
-// DEBUG: VERIFY OPENAI KEY ON RENDER
+// DEBUG (SAFE TO KEEP)
 // =====================================================
 console.log("🔑 OPENAI KEY EXISTS:", !!process.env.OPENAI_API_KEY);
 
@@ -30,7 +30,7 @@ const ROOT_PATH = path.join(__dirname, "..");
 console.log("📁 Serving frontend from:", ROOT_PATH);
 
 // =====================================================
-// SERVE FRONTEND FILES
+// SERVE FRONTEND
 // =====================================================
 app.use(express.static(ROOT_PATH));
 
@@ -39,21 +39,21 @@ app.get("/", (req, res) => {
 });
 
 // =====================================================
-// LOAD ABOUT ME JSON (SINGLE SOURCE OF TRUTH)
+// LOAD ABOUT ME JSON
 // =====================================================
 const aboutMe = JSON.parse(
   fs.readFileSync(path.join(__dirname, "about_me.json"), "utf-8")
 );
 
 // =====================================================
-// OPENAI CLIENT
+// OPENAI CLIENT (NEW API – PRODUCTION SAFE)
 // =====================================================
-const client = new OpenAI({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 // =====================================================
-// SYSTEM PROMPT (STRICT MODE)
+// SYSTEM PROMPT
 // =====================================================
 const SYSTEM_PROMPT = `
 You are Areesh Jabbar.
@@ -70,7 +70,7 @@ STRICT RULES (MUST FOLLOW):
 `;
 
 // =====================================================
-// AI CHAT ENDPOINT
+// AI CHAT ENDPOINT (FIXED)
 // =====================================================
 app.post("/api/chat", async (req, res) => {
   try {
@@ -80,11 +80,14 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "No message provided" });
     }
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-3.5-turbo", // ✅ RENDER-SAFE MODEL
-      temperature: 0.0,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+    const response = await openai.responses.create({
+      model: "gpt-4o-mini",
+      temperature: 0,
+      input: [
+        {
+          role: "system",
+          content: SYSTEM_PROMPT,
+        },
         {
           role: "system",
           content: `Here is my verified profile data (JSON). This is the ONLY source of truth:\n${JSON.stringify(
@@ -93,28 +96,27 @@ app.post("/api/chat", async (req, res) => {
             2
           )}`,
         },
-        { role: "user", content: message },
+        {
+          role: "user",
+          content: message,
+        },
       ],
     });
 
     res.json({
-      reply: completion.choices[0].message.content,
+      reply: response.output_text,
     });
 
   } catch (error) {
-    console.error("❌ OpenAI Chat Error:", error?.message || error);
-    res.status(500).json({
-      error: "AI server error",
-    });
+    console.error("❌ AI ERROR:", error);
+    res.status(500).json({ error: "AI server error" });
   }
 });
 
 // =====================================================
-// CONTACT FORM EMAIL ENDPOINT
+// CONTACT FORM
 // =====================================================
 app.post("/send-message", async (req, res) => {
-  console.log("📩 Incoming Hire Me request:", req.body);
-
   const { name, phone, message } = req.body;
 
   if (!name || !phone || !message) {
@@ -145,7 +147,7 @@ app.post("/send-message", async (req, res) => {
     res.json({ message: "✅ Message sent successfully!" });
 
   } catch (error) {
-    console.error("❌ Email Error:", error?.message || error);
+    console.error("❌ Email Error:", error);
     res.status(500).json({ message: "❌ Failed to send message" });
   }
 });
@@ -154,7 +156,6 @@ app.post("/send-message", async (req, res) => {
 // START SERVER (RENDER SAFE)
 // =====================================================
 const PORT = process.env.PORT || 8787;
-
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
