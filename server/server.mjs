@@ -8,6 +8,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // =====================================================
+// DEBUG: VERIFY OPENAI KEY ON RENDER
+// =====================================================
+console.log("🔑 OPENAI KEY EXISTS:", !!process.env.OPENAI_API_KEY);
+
+// =====================================================
 // APP SETUP
 // =====================================================
 const app = express();
@@ -76,7 +81,7 @@ app.post("/api/chat", async (req, res) => {
     }
 
     const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-3.5-turbo", // ✅ RENDER-SAFE MODEL
       temperature: 0.0,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
